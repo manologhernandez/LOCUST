@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">LOCUST</string>
+    <string name="app_name">cs192sprint1</string>
+    <string name="receiver_key">receiverlist123</string>
+    <string-array name="sex">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string-array name="freq">
+        <item>Every 10 Mins.</item>
+        <item>Every 15 Mins.</item>
+        <item>Every 30 Mins.</item>
+    </string-array>
 </resources>
