@@ -12,6 +12,7 @@
         <activity android:name=".RemoveReceiverActivity"></activity>
         <activity android:name=".AddReceiverActivity"></activity>
         <activity android:name=".ManageReceiversActivity"></activity>
+        <activity android:name=".EditSettingsActivity"></activity>
         <activity android:name=".MainMenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
