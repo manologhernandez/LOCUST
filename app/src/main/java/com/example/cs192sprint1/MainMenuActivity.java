@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainMenuActivity extends AppCompatActivity {
 
      Button manageReceiversBtn; // button for going to the manage receivers screen
+     Button editSettingsBtn;
 
      /*
      Method Name: onCreate
@@ -38,6 +39,7 @@ public class MainMenuActivity extends AppCompatActivity {
           setContentView(R.layout.activity_main_menu);
 
           manageReceiversBtn = (Button) findViewById(R.id.manage_receivers);
+          editSettingsBtn = (Button) findViewById(R.id.edit_settings_button);
 
           manageReceiversBtn.setOnClickListener(new View.OnClickListener() {
                /*
@@ -52,6 +54,22 @@ public class MainMenuActivity extends AppCompatActivity {
                public void onClick(View v) {
                     Intent manageReceiversView = new Intent(getApplicationContext(), ManageReceiversActivity.class);
                     startActivity(manageReceiversView);
+               }
+          });
+
+          editSettingsBtn.setOnClickListener(new View.OnClickListener() {
+               /*
+               Method Name: onClick
+               Creation date: 1/21/20
+               Purpose: Starts a new Intent to go to the Manage Receivers page
+               Calling Arguments: n/a
+               Required Files: n/a
+               Return Value: n/a
+                */
+               @Override
+               public void onClick(View v) {
+                    Intent editSettingsView = new Intent(getApplicationContext(), EditSettingsActivity.class);
+                    startActivity(editSettingsView);
                }
           });
      }
