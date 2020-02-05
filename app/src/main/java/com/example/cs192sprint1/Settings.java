@@ -14,45 +14,25 @@ Code History
 package com.example.cs192sprint1;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
-
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 import org.json.JSONException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class Settings extends AppCompatActivity {
-     String userName;
-     String userSex;
-     String locationFreq;
-     String userDefmsg;
-     int userAge;
      String filename;
      String filepath;
      String baseDir;
      Context c;
 
      public Settings(Context c){
-//          this.userName = name;
-//          this.userSex = sex;
-//          this.userAge = age;
-//          this.locationFreq = freq;
-//          this.userDefmsg = defMsg;
+
           this.c = c;
           this.baseDir = c.getApplicationInfo().dataDir;
           this.filename = "userSettings.json";
@@ -79,18 +59,18 @@ public class Settings extends AppCompatActivity {
           }
      }
 
-     public void readSettings(){
-          try{
-               FileReader fr = new FileReader(filepath);
-               JSONParser jsonParser = new JSONParser();
-               JSONObject obj = (JSONObject) jsonParser.parse(fr);
-               System.out.println(obj);
-          }catch (FileNotFoundException e) {
-               e.printStackTrace();
-          } catch (ParseException e) {
-               e.printStackTrace();
-          } catch (IOException e) {
-               e.printStackTrace();
-          }
+     public JSONObject readSettings() throws ParseException, IOException {
+          FileReader fr = new FileReader(filepath);
+          JSONParser jsonParser = new JSONParser();
+          JSONObject obj = (JSONObject) jsonParser.parse(fr);
+          fr.close();
+          return obj;
+     }
+
+     public boolean exists(){
+          File temp = new File(filepath);
+          boolean exists = temp.exists();
+          boolean isFile = temp.isFile();
+          return (exists && isFile);
      }
 }

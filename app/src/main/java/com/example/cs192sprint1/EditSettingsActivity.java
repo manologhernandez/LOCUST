@@ -27,6 +27,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
+
+import java.io.IOException;
 
 public class EditSettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -36,22 +40,48 @@ public class EditSettingsActivity extends AppCompatActivity implements AdapterVi
           setContentView(R.layout.activity_edit_settings);
 
           final Spinner sexArray = findViewById(R.id.editSettingsInputSex);
-          ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sex, android.R.layout.simple_spinner_item);
-          adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-          sexArray.setAdapter(adapter);
-          sexArray.setOnItemSelectedListener(this);
-
           final Spinner freqArray = findViewById(R.id.editSettingsInputFreq);
-          ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.freq, android.R.layout.simple_spinner_item);
-          adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-          freqArray.setAdapter(adapter2);
-          freqArray.setOnItemSelectedListener(this);
-
           final EditText name = findViewById(R.id.editSettingsInputName);
           final EditText age = findViewById(R.id.editSettingsInputAge);
           final EditText defaultMsg = findViewById(R.id.editTextInputDefMes);
+          final Button cancelBtn = findViewById(R.id.editSettingsCancel);
+          final Button saveBtn = findViewById(R.id.editSettingsSave);
+          ArrayAdapter<CharSequence> sexAdapter;
+          ArrayAdapter<CharSequence> freqAdapter;
+          final Settings s = new Settings(getApplicationContext());
+          JSONObject currentSettings;
+          int spinnerPos1, spinnerPos2;
 
-          Button cancelBtn = findViewById(R.id.editSettingsCancel);
+          sexAdapter = ArrayAdapter.createFromResource(this, R.array.sex, android.R.layout.simple_spinner_item);
+          sexAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+          sexArray.setAdapter(sexAdapter);
+          sexArray.setOnItemSelectedListener(this);
+
+          freqAdapter = ArrayAdapter.createFromResource(this, R.array.freq, android.R.layout.simple_spinner_item);
+          freqAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+          freqArray.setAdapter(freqAdapter);
+          freqArray.setOnItemSelectedListener(this);
+
+          //Auto-populate with current settings
+
+          if(s.exists()){
+               try {
+                    currentSettings = s.readSettings();
+                    name.setText(currentSettings.get("Name").toString());
+                    age.setText(currentSettings.get("Age").toString());
+                    defaultMsg.setText(currentSettings.get("Default Message").toString());
+                    spinnerPos1 = sexAdapter.getPosition(currentSettings.get("Sex").toString());
+                    sexArray.setSelection(spinnerPos1);
+                    spinnerPos2 = freqAdapter.getPosition(currentSettings.get("Location Frequency").toString());
+                    freqArray.setSelection(spinnerPos2);
+               } catch (ParseException e) {
+                    e.printStackTrace();
+               } catch (IOException e) {
+                    e.printStackTrace();
+               }
+
+          }
+
           cancelBtn.setOnClickListener(new View.OnClickListener() {
                /*
                Method Name: onClick
@@ -63,14 +93,10 @@ public class EditSettingsActivity extends AppCompatActivity implements AdapterVi
                 */
                @Override
                public void onClick(View v) {
-//                    Intent goBackToMain = new Intent(getApplicationContext(), MainMenuActivity.class);
-//                    startActivity(goBackToMain);
-                    Settings s = new Settings(getApplicationContext());
-                    s.readSettings();
+                    Intent goBackToMain = new Intent(getApplicationContext(), MainMenuActivity.class);
+                    startActivity(goBackToMain);
                }
           });
-
-          Button saveBtn = findViewById(R.id.editSettingsSave);
           saveBtn.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
@@ -84,7 +110,6 @@ public class EditSettingsActivity extends AppCompatActivity implements AdapterVi
                          Toast.makeText(getApplicationContext(), "Missing input fields", Toast.LENGTH_SHORT).show();
                     }else{
                          int userAge = Integer.parseInt(inputAge);
-                         Settings s = new Settings(getApplicationContext());
                          try {
                               s.saveSettings(userName, userAge, userSex, userFreq, userDefaultMsg);
                          } catch (JSONException e) {
@@ -114,4 +139,6 @@ public class EditSettingsActivity extends AppCompatActivity implements AdapterVi
      public void onNothingSelected(AdapterView<?> parent) {
 
      }
+
+
 }
