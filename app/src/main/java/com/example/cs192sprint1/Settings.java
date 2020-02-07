@@ -39,17 +39,15 @@ public class Settings extends AppCompatActivity {
           this.filepath = baseDir + File.separator + filename;
      }
 
-     public void saveSettings(String name, int age, String sex, String freq, String defMsg) throws JSONException {
+     public void saveSettings(String name, String freq, String defMsg) throws JSONException {
           JSONObject newSettings = new JSONObject();
           newSettings.put("Name", name);
-          newSettings.put("Age", age);
-          newSettings.put("Sex", sex);
           newSettings.put("Location Frequency",freq);
           newSettings.put("Default Message", defMsg);
           File f = new File(filepath);
           //Write JSON file
           try  {
-               Log.i("json:", newSettings.toString());
+               //Log.i("json:", newSettings.toString());
                FileWriter file = new FileWriter(f);
                file.write(newSettings.toString());
                file.flush();

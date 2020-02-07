@@ -39,23 +39,15 @@ public class EditSettingsActivity extends AppCompatActivity implements AdapterVi
           super.onCreate(savedInstanceState);
           setContentView(R.layout.activity_edit_settings);
 
-          final Spinner sexArray = findViewById(R.id.editSettingsInputSex);
           final Spinner freqArray = findViewById(R.id.editSettingsInputFreq);
           final EditText name = findViewById(R.id.editSettingsInputName);
-          final EditText age = findViewById(R.id.editSettingsInputAge);
           final EditText defaultMsg = findViewById(R.id.editTextInputDefMes);
           final Button cancelBtn = findViewById(R.id.editSettingsCancel);
           final Button saveBtn = findViewById(R.id.editSettingsSave);
-          ArrayAdapter<CharSequence> sexAdapter;
           ArrayAdapter<CharSequence> freqAdapter;
           final Settings s = new Settings(getApplicationContext());
           JSONObject currentSettings;
-          int spinnerPos1, spinnerPos2;
-
-          sexAdapter = ArrayAdapter.createFromResource(this, R.array.sex, android.R.layout.simple_spinner_item);
-          sexAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-          sexArray.setAdapter(sexAdapter);
-          sexArray.setOnItemSelectedListener(this);
+          int spinnerPos;
 
           freqAdapter = ArrayAdapter.createFromResource(this, R.array.freq, android.R.layout.simple_spinner_item);
           freqAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -68,12 +60,9 @@ public class EditSettingsActivity extends AppCompatActivity implements AdapterVi
                try {
                     currentSettings = s.readSettings();
                     name.setText(currentSettings.get("Name").toString());
-                    age.setText(currentSettings.get("Age").toString());
                     defaultMsg.setText(currentSettings.get("Default Message").toString());
-                    spinnerPos1 = sexAdapter.getPosition(currentSettings.get("Sex").toString());
-                    sexArray.setSelection(spinnerPos1);
-                    spinnerPos2 = freqAdapter.getPosition(currentSettings.get("Location Frequency").toString());
-                    freqArray.setSelection(spinnerPos2);
+                    spinnerPos = freqAdapter.getPosition(currentSettings.get("Location Frequency").toString());
+                    freqArray.setSelection(spinnerPos);
                } catch (ParseException e) {
                     e.printStackTrace();
                } catch (IOException e) {
@@ -101,17 +90,15 @@ public class EditSettingsActivity extends AppCompatActivity implements AdapterVi
                @Override
                public void onClick(View v) {
                     String userName = name.getText().toString();
-                    String inputAge = age.getText().toString();
                     String userDefaultMsg = defaultMsg.getText().toString();
-                    String userSex = sexArray.getSelectedItem().toString();
                     String userFreq = freqArray.getSelectedItem().toString();
 
-                    if(userName.equals("") || inputAge.equals("") || userDefaultMsg.equals("") || userSex.equals("") || userFreq.equals("")){
+                    if(userName.equals("") || userDefaultMsg.equals("") || userFreq.equals("")){
                          Toast.makeText(getApplicationContext(), "Missing input fields", Toast.LENGTH_SHORT).show();
                     }else{
-                         int userAge = Integer.parseInt(inputAge);
+
                          try {
-                              s.saveSettings(userName, userAge, userSex, userFreq, userDefaultMsg);
+                              s.saveSettings(userName, userFreq, userDefaultMsg);
                          } catch (JSONException e) {
                               e.printStackTrace();
                          }
