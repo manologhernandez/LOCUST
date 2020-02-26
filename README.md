@@ -1,7 +1,9 @@
 # LOCUST APP
 
-## cs192 sprint1
-### Finished 1/31/20
-Requirements:
-- Add Receiver
-- Remove Receiver
+An Android location sharing application. 
+
+Created by:
+
+- Jimuel Celeste Jr
+- Manolo Hernandez
+- Ricardo Puato III
