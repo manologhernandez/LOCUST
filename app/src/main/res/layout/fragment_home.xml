@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <View
+        android:id="@+id/view_home_bg"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="@id/text_home_title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view_home_divider"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@id/view_home_bg"
+        app:layout_constraintTop_toTopOf="@id/text_home_title"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+    <TextView
+        android:id="@+id/text_home_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Locust\nTracker For Safety"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="38sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageButton
+        android:id="@+id/button_home_send"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_send_location"
+        app:layout_constraintBottom_toTopOf="@id/text_home_data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_home_divider" />
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:gravity="center"
+        android:text="SOS"
+        android:textColor="@android:color/black"
+        android:textSize="100sp"
+        app:layout_constraintBottom_toTopOf="@id/text_home_data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_home_divider" />
+
+    <TextView
+        android:id="@+id/text_home_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="First Last III - 09999999999\nLast Known Location: 14.6538° N, 121.0685° E"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_home_send" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,8 @@
 <resources>
     <string name="app_name">Locust</string>
-    <string name="receiver_key">receiverlist123</string>
-    <string-array name="freq">
-        <item></item>
-        <item>Every 10 Mins.</item>
-        <item>Every 15 Mins.</item>
-        <item>Every 30 Mins.</item>
+    <string-array name="array_freq">
+        <item>Every 10 Minutes</item>
+        <item>Every 15 Minutes</item>
+        <item>Every 30 Minutes</item>
     </string-array>
 </resources>

@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name='cs192sprint1'
+rootProject.name='Locust'
