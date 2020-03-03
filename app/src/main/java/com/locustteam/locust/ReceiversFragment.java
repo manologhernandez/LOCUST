@@ -12,8 +12,10 @@ Code History
      2/18/20 - File Created by Ricardo Puato III
 */
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -51,7 +54,7 @@ public class ReceiversFragment extends Fragment {
 
     /*
     Method Name: onCreateView
-    Creation date: 1/21/20
+    Creation date: 2/18/20
     Purpose: loads the view
     Calling Arguments: n/a
     Required Files: n/a
@@ -64,8 +67,8 @@ public class ReceiversFragment extends Fragment {
     }
 
     /*
-    Method Name: onCreate
-    Creation date: 1/21/20
+    Method Name: OnActivityCreated
+    Creation date: 2/18/20
     Purpose: connects the elements to the code.
     Calling Arguments: n/a
     Required Files: n/a
@@ -74,19 +77,6 @@ public class ReceiversFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
-        //Temporary For Testing.
-        /*
-        receiversList = new ArrayList<>();
-        receiversList.add(new Receivers("Ricardo Puato III", "09999169624"));
-        receiversList.add(new Receivers("Manolo Hernandez", "099994345766"));
-        receiversList.add(new Receivers("Jimuel Celeste", "094456756845"));
-        //Read the Array List from the SharedPreferences
-            //Just While Loop it.
-         */
-
-
 
         loadData();
         buildRecyclerView();
@@ -114,7 +104,7 @@ public class ReceiversFragment extends Fragment {
 
     /*
     Method Name: saveData
-    Creation date: 1/21/20
+    Creation date: 2/22/20
     Purpose: saves the data to sharedPreferences
     Calling Arguments: n/a
     Required Files: n/a
@@ -131,7 +121,7 @@ public class ReceiversFragment extends Fragment {
 
     /*
     Method Name: loadData
-    Creation date: 1/21/20
+    Creation date: 2/22/20
     Purpose: loads the data from sharedPreferences
     Calling Arguments: n/a
     Required Files: n/a
@@ -151,7 +141,7 @@ public class ReceiversFragment extends Fragment {
 
     /*
     Method Name: undoRemove
-    Creation date: 1/21/20
+    Creation date: 2/24/20
     Purpose: undo the removed receiver from the arrayList
     Calling Arguments: n/a
     Required Files: n/a
@@ -162,6 +152,7 @@ public class ReceiversFragment extends Fragment {
             receiversList.add(removed);
         }
 
+        undoReceiverButton.setColorFilter(0xFF000000);
         removed = null;
         saveData();
         mAdapter.notifyDataSetChanged();
@@ -169,7 +160,7 @@ public class ReceiversFragment extends Fragment {
 
     /*
     Method Name: removeReceiver
-    Creation date: 1/21/20
+    Creation date: 2/22/20
     Purpose: removes the receiver from the list and stores it to sharedPreferences
     Calling Arguments: n/a
     Required Files: n/a
@@ -178,13 +169,14 @@ public class ReceiversFragment extends Fragment {
     public void removeReceiver(int position){
         removed = receiversList.get(position);
         receiversList.remove(position);
+        undoReceiverButton.setColorFilter(0xFFCE2029);
         saveData();
         mAdapter.notifyDataSetChanged();
     }
 
     /*
     Method Name: buildRecyclerView
-    Creation date: 1/21/20
+    Creation date: 2/22/20
     Purpose: build the recycler.
     Calling Arguments: n/a
     Required Files: n/a
@@ -201,8 +193,32 @@ public class ReceiversFragment extends Fragment {
         mAdapter.setOnItemClickListener(new ReceiversAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                removeReceiver(position);
+                //removeReceiver(position);
+                buildDialog(position);
             }
         });
+    }
+
+    public void buildDialog(final int position){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        removeReceiver(position);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Are you sure?")
+                .setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener)
+                .show();
     }
 }
