@@ -14,6 +14,7 @@ Code History
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,7 +50,7 @@ public class AddReceiversFragment extends Fragment {
 
      /*
      Method Name: onCreateView
-     Creation date:
+     Creation date: 2/18/2020
      Purpose: loads the fragment.
      Calling Arguments: n/a
      Required Files: n/a
@@ -62,14 +63,14 @@ public class AddReceiversFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_add_receivers, container, false);
     }
 
-     /*
-     Method Name: onCreate
-     Creation date: 1/21/20
-     Purpose: connects elements to the code.
-     Calling Arguments: n/a
-     Required Files: n/a
-     Return Value: n/a
-      */
+    /*
+    Method Name: onActivityCreated
+    Creation date: 2/22/20
+    Purpose: connects elements to the code.
+    Calling Arguments: n/a
+    Required Files: n/a
+    Return Value: n/a
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -109,14 +110,14 @@ public class AddReceiversFragment extends Fragment {
 
     }
 
-         /*
-     Method Name: onCreate
-     Creation date: 1/21/20
-     Purpose: saves the data to sharedPreferences
-     Calling Arguments: n/a
-     Required Files: n/a
-     Return Value: n/a
-      */
+    /*
+Method Name: saveData
+Creation date: 2/23/20
+Purpose: saves the data to sharedPreferences
+Calling Arguments: n/a
+Required Files: n/a
+Return Value: n/a
+ */
     private void saveData(){
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Receivers", getActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -128,7 +129,7 @@ public class AddReceiversFragment extends Fragment {
 
     /*
     Method Name: loadData
-    Creation date: 1/21/20
+    Creation date: 2/23/20
     Purpose: loads the data from sharedPreferences
     Calling Arguments: n/a
     Required Files: n/a
@@ -146,14 +147,14 @@ public class AddReceiversFragment extends Fragment {
         }
     }
 
-        /*
-    Method Name: addReceiver
-    Creation date: 1/21/20
-    Purpose: adds a receiver to the arrayList.
-    Calling Arguments: n/a
-    Required Files: n/a
-    Return Value: n/a
-     */
+    /*
+Method Name: addReceiver
+Creation date: 2/23/20
+Purpose: adds a receiver to the arrayList.
+Calling Arguments: n/a
+Required Files: n/a
+Return Value: n/a
+ */
     private boolean addReceiver(){
         Receivers receiver = new Receivers(inputName.getText().toString(),inputPhone.getText().toString());
 
@@ -169,7 +170,7 @@ public class AddReceiversFragment extends Fragment {
 
     /*
     Method Name: validateName
-    Creation date: 1/21/20
+    Creation date: 2/23/20
     Purpose: checks if there are duplicate names.
     Calling Arguments: n/a
     Required Files: n/a
@@ -178,28 +179,25 @@ public class AddReceiversFragment extends Fragment {
     private boolean validateName(Receivers receiver){
         if( receiver.getName().matches("") ){
             inputName.setError("Empty Field!");
+            inputName.getBackground().setColorFilter(0xFFCE2029, PorterDuff.Mode.MULTIPLY);
             return false;
         }
 
-        Log.d("Running Loop", "OK!");
         for(Receivers r: mReceiversList){
             if( r.getName().trim().equals(receiver.getName().trim()) ){
                 inputName.setError("Duplicate Name!");
-                return false;
-            }
-
-            if( r.getPhone().equals(receiver.getPhone()) ){
-                inputPhone.setError("Duplicate Phone!");
+                inputName.getBackground().setColorFilter(0xFFCE2029, PorterDuff.Mode.MULTIPLY);
                 return false;
             }
         }
 
+        inputName.getBackground().setColorFilter(0xFF000000, PorterDuff.Mode.MULTIPLY);
         return true;
     }
 
     /*
     Method Name: validatePhone
-    Creation date: 1/21/20
+    Creation date: 2/23/20
     Purpose: checks if the phone number given is valid.
     Calling Arguments: n/a
     Required Files: n/a
@@ -208,12 +206,25 @@ public class AddReceiversFragment extends Fragment {
     private boolean validatePhone(Receivers receiver){
         if( receiver.getPhone().matches("") ){
             inputPhone.setError("Empty Field!");
-            return false;
-        }else if( !(PASSWORD_PATTERN.matcher( receiver.getPhone() ).matches()) ){
-            inputPhone.setError("Invalid Phone Number!");
+            inputPhone.getBackground().setColorFilter(0xFFCE2029, PorterDuff.Mode.MULTIPLY);
             return false;
         }
 
+        if( !(PASSWORD_PATTERN.matcher( receiver.getPhone() ).matches()) ){
+            inputPhone.setError("Invalid Phone Number!");
+            inputPhone.getBackground().setColorFilter(0xFFCE2029, PorterDuff.Mode.MULTIPLY);
+            return false;
+        }
+
+        for(Receivers r: mReceiversList){
+            if( r.getPhone().substring( r.getPhone().trim().length() - 10 ).equals( receiver.getPhone().substring( receiver.getPhone().trim().length() - 10 ) ) ){
+                inputPhone.setError("Duplicate Phone Numbers!");
+                inputPhone.getBackground().setColorFilter(0xFFCE2029, PorterDuff.Mode.MULTIPLY);
+                return false;
+            }
+        }
+
+        inputPhone.getBackground().setColorFilter(0xFF000000, PorterDuff.Mode.MULTIPLY);
         return true;
     }
 }

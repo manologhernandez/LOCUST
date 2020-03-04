@@ -53,8 +53,12 @@
         android:id="@+id/input_settings_name"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/text_input_border"
+        android:backgroundTint="#000000"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toEndOf="@id/text_settings_name"
         app:layout_constraintTop_toBottomOf="@id/text_settings_title" />
 
@@ -77,6 +81,9 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:background="@drawable/text_input_border"
+        android:backgroundTint="#000000"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_settings_freq" />
@@ -99,7 +106,12 @@
         android:id="@+id/input_settings_def"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:lines="3"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/text_input_border"
+        android:backgroundTint="#000000"
+        android:gravity="top|start"
+        android:lines="4"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_settings_def" />
