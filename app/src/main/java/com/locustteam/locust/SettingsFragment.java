@@ -53,7 +53,7 @@ public class SettingsFragment extends Fragment {
     }
 
     /*
-    Method Name: onCreate
+    Method Name: onActivityCreated
     Creation date: 1/21/20
     Purpose: connects the elements to the code.
     Calling Arguments: n/a
