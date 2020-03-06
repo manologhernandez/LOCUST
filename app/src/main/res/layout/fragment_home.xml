@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5">
@@ -47,7 +48,8 @@
         app:layout_constraintBottom_toTopOf="@id/text_home_data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_home_divider" />
+        app:layout_constraintTop_toBottomOf="@id/view_home_divider"
+        app:layout_constraintVertical_bias="0.25" />
 
     <TextView
         android:layout_width="300dp"
@@ -67,13 +69,40 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="First Last III - 09999999999\nLast Known Location: 14.6538° N, 121.0685° E"
+        android:text="First Last III - 09999999999\nLast Known Location:"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_home_send" />
+
+    <TextView
+        android:id="@+id/user_current_coordinates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Press SOS To Begin Location Tracking"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_street_address_text"
+        app:layout_constraintVertical_bias="0.19999999" />
+
+    <TextView
+        android:id="@+id/user_street_address_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="----------"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_home_data"
+        app:layout_constraintVertical_bias="0.231" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

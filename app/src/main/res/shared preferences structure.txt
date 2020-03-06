@@ -1,0 +1,12 @@
+File Conatining Structure of the Shared Preferences (to not get confused)
+
+Name: Settings
+Key/s:  - Settings_Name
+        - Settings_Def
+        - Settings_Freq
+
+Name: Location-Data
+Key/s:  - Location_Latitude
+        - Location_Longitude
+        - Location_Address
+        - Location_isSharing

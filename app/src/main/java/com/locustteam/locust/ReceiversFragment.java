@@ -217,6 +217,7 @@ public class ReceiversFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Are you sure?")
+                .setTitle("Confirm Deletion")
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener)
                 .show();

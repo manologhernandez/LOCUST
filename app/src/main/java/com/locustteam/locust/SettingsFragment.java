@@ -81,7 +81,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Store Data then Display.
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Settings", getActivity().MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SETTINGS_SHARED_PREFS, getActivity().MODE_PRIVATE);
                 if( sharedPreferences.getString("Settings_Name",null) == null ){
                     saveData();
                     Toast.makeText(getActivity(),"Settings Saved!", Toast.LENGTH_SHORT).show();
@@ -111,7 +111,7 @@ public class SettingsFragment extends Fragment {
     Return Value: n/a
      */
     private void saveData() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Settings", getActivity().MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SETTINGS_SHARED_PREFS, getActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("Settings_Name", inputName.getText().toString() );
         editor.putString("Settings_Def", inputDef.getText().toString() );
@@ -128,7 +128,7 @@ public class SettingsFragment extends Fragment {
     Return Value: n/a
      */
     private void loadData(){
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Settings", getActivity().MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SETTINGS_SHARED_PREFS, getActivity().MODE_PRIVATE);
         try {
             inputName.setText( sharedPreferences.getString("Settings_Name", null) );
             inputDef.setText( sharedPreferences.getString("Settings_Def", null) );

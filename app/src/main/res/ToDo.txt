@@ -1,0 +1,7 @@
+List of Things still needed to be implemented
+
+Todo    set interval of location tracking to be what the user provided
+
+ToDo    Get users phone number
+todo    if app is permanently closed, should stop location sharing in sharedprefs.
+todo    change app colors when location sharing is on vs off
