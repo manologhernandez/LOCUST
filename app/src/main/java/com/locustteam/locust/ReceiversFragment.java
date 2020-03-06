@@ -94,10 +94,12 @@ public class ReceiversFragment extends Fragment {
         });
 
         undoReceiverButton = getView().findViewById(R.id.button_receivers_undo);
+        undoReceiverButton.setVisibility(View.INVISIBLE);
         undoReceiverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 undoRemove();
+                undoReceiverButton.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -169,7 +171,8 @@ public class ReceiversFragment extends Fragment {
     public void removeReceiver(int position){
         removed = receiversList.get(position);
         receiversList.remove(position);
-        undoReceiverButton.setColorFilter(0xFFCE2029);
+        undoReceiverButton.setColorFilter(0xFF000000);
+        undoReceiverButton.setVisibility(View.VISIBLE);
         saveData();
         mAdapter.notifyDataSetChanged();
     }
