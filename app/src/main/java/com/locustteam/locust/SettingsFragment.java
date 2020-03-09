@@ -10,11 +10,14 @@ Author: Ricardo Puato III
 
 Code History
      2/18/20 - File Created by Ricardo Puato III
+     3/06/20 - Settings edited by Manolo Hernandez
 */
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -80,26 +84,66 @@ public class SettingsFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Store Data then Display.
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SETTINGS_SHARED_PREFS, getActivity().MODE_PRIVATE);
-                if( sharedPreferences.getString("Settings_Name",null) == null ){
-                    saveData();
-                    Toast.makeText(getActivity(),"Settings Saved!", Toast.LENGTH_SHORT).show();
-
-                    FragmentManager fragmentManager = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    HomeFragment toMain = new HomeFragment();
-                    fragmentTransaction.replace(R.id.fragment_container, toMain);
-                    fragmentTransaction.commit();
+                SharedPreferences locationPreference = getActivity().getSharedPreferences(Constants.LOCATION_SHARED_PREFS, getActivity().MODE_PRIVATE);
+                if(locationPreference.getBoolean("Location_isSharing", false)){
+                    buildWarningDialog();
                 }else{
-                    saveData();
-                    loadData();
-                    Toast.makeText(getActivity(),"Settings Saved!", Toast.LENGTH_SHORT).show();
+                    //Store Data then Display.
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SETTINGS_SHARED_PREFS, getActivity().MODE_PRIVATE);
+                    //if first time saving data, redirect back to home after saving
+                    if( sharedPreferences.getString("Settings_Name",null) == null ){
+                        saveData();
+                        Toast.makeText(getActivity(),"Settings Saved!", Toast.LENGTH_SHORT).show();
+
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        HomeFragment toMain = new HomeFragment();
+                        fragmentTransaction.replace(R.id.fragment_container, toMain);
+                        fragmentTransaction.commit();
+                    }else{
+                        if(saveData()){
+                            loadData();
+                            Toast.makeText(getActivity(),"Settings Saved!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
+
             }
         });
 
         loadData();
+    }
+
+    /*
+     Method Name: buildWarningDialog
+     Creation date: 03/06/20
+     Purpose: to show the user a dialog to warn them about settings changes
+     Calling Arguments: n/a
+     Required Files: n/a
+     Return Value: n/a
+      */
+    public void buildWarningDialog(){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+
+                        if(saveData()){
+                            loadData();
+                            Toast.makeText(getActivity(),"Settings Saved!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Locust is currently tracking your location. Changes made in settings will only be incorporated in succeeding SOS trackings.")
+                .setTitle("Warning")
+                .setPositiveButton("I understand", dialogClickListener)
+                .show();
     }
 
     /*
@@ -108,15 +152,23 @@ public class SettingsFragment extends Fragment {
     Purpose: stores the data to sharedPreferences
     Calling Arguments: n/a
     Required Files: n/a
-    Return Value: n/a
+    Return Value: boolean (true or false)
      */
-    private void saveData() {
+    private boolean saveData() {
+        if(inputName.getText().toString().trim().equals("") || inputDef.getText().toString().trim().equals("") || freqSpinner.getSelectedItem().toString().trim().equals("")){
+            Toast toast = Toast.makeText(getActivity(),"Please fill up all items before saving.", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SETTINGS_SHARED_PREFS, getActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("Settings_Name", inputName.getText().toString() );
         editor.putString("Settings_Def", inputDef.getText().toString() );
-        editor.putString("Settings_Freq", freqSpinner.getSelectedItem().toString() );
+        editor.putInt("Settings_Freq", Integer.parseInt(freqSpinner.getSelectedItem().toString().split(" ")[1]));
         editor.apply();
+
+        return true;
+
     }
 
     /*
@@ -130,17 +182,20 @@ public class SettingsFragment extends Fragment {
     private void loadData(){
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SETTINGS_SHARED_PREFS, getActivity().MODE_PRIVATE);
         try {
-            inputName.setText( sharedPreferences.getString("Settings_Name", null) );
-            inputDef.setText( sharedPreferences.getString("Settings_Def", null) );
-            switch(sharedPreferences.getString("Settings_Freq", null)){
-                case "Every 10 Minutes":
+            inputName.setText( sharedPreferences.getString("Settings_Name", "") );
+            inputDef.setText( sharedPreferences.getString("Settings_Def", "") );
+            switch(sharedPreferences.getInt("Settings_Freq", 0)){
+                case 0:
                     freqSpinner.setSelection(0);
                     break;
-                case "Every 15 Minutes":
+                case 10:
                     freqSpinner.setSelection(1);
                     break;
-                case "Every 30 Minutes":
+                case 15:
                     freqSpinner.setSelection(2);
+                    break;
+                case 30:
+                    freqSpinner.setSelection(3);
                     break;
             }
         }catch (Exception e){

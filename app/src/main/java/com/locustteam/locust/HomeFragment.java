@@ -68,6 +68,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
      private ImageButton sosButton;
@@ -115,7 +116,7 @@ public class HomeFragment extends Fragment {
 
           //Check if settings were already set, if not, redirect user to settings screen.
           if(settingsPreferences.getString("Settings_Name",null) == null ){
-               Toast toast = Toast.makeText(getActivity(),"Empty Settings! Redirecting...", Toast.LENGTH_SHORT);
+               Toast toast = Toast.makeText(getActivity(),"Please initialize your settings! Redirecting...", Toast.LENGTH_SHORT);
                toast.show();
                new CountDownTimer(1000, 1000) {
                     public void onTick(long millisUntilFinished) {}
@@ -209,6 +210,15 @@ public class HomeFragment extends Fragment {
           });
      }
 
+     /*
+     Method Name: updateLocationUIElements
+     Creation date: 03/06/20
+     Purpose: Updates Location UI elements with new data
+     Calling Arguments: n/a
+     Required Files: n/a
+     Return Value: n/a
+      */
+
      private void updateLocationUIElements() {
           if(locationPreferences.getBoolean("Location_isSharing",false)) { //if you are sharing ...
                userAddress = locationPreferences.getString("Location_Address", null);
@@ -222,6 +232,14 @@ public class HomeFragment extends Fragment {
           }
      }
 
+     /*
+     Method Name: saveLocationData
+     Creation date: 03/06/20
+     Purpose: save location data to shared preferences
+     Calling Arguments: double currentLatitude, double currentLongitude, String userAddress
+     Required Files: n/a
+     Return Value: n/a
+      */
      private void saveLocationData(double currentLatitude, double currentLongitude, String userAddress) {
           SharedPreferences.Editor editor = locationPreferences.edit();
           editor.putString("Location_Latitude", String.valueOf(currentLatitude));
@@ -230,17 +248,40 @@ public class HomeFragment extends Fragment {
           editor.apply();
      }
 
-
+     /*
+     Method Name: startLocationForegroundService
+     Creation date: 03/06/20
+     Purpose: starts the foreground service for location tracking.
+     Calling Arguments: n/a
+     Required Files: n/a
+     Return Value: n/a
+      */
      public void startLocationForegroundService() {
           Intent serviceIntent = new Intent(getActivity(), LocationForegroundService.class);
           ContextCompat.startForegroundService(getContext(), serviceIntent);
      }
 
+     /*
+     Method Name: stopLocationForegroundService
+     Creation date: 03/06/20
+     Purpose: stops the foreground service for location tracking.
+     Calling Arguments: n/a
+     Required Files: n/a
+     Return Value: n/a
+      */
      public void stopLocationForegroundService() {
           Intent serviceIntent = new Intent(getActivity(), LocationForegroundService.class);
           getActivity().stopService(serviceIntent);
      }
 
+     /*
+     Method Name: buildStartLocationTrackingDialog
+     Creation date: 03/06/20
+     Purpose: to show the user a dialog to confirm to start tracking location
+     Calling Arguments: n/a
+     Required Files: n/a
+     Return Value: n/a
+      */
      public void buildStartLocationTrackingDialog(){
           DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                @Override
@@ -265,6 +306,14 @@ public class HomeFragment extends Fragment {
                   .show();
      }
 
+     /*
+     Method Name: buildStopLocationTrackingDialog
+     Creation date: 03/06/20
+     Purpose: to show the user a dialog to confirm to stop tracking location
+     Calling Arguments: n/a
+     Required Files: n/a
+     Return Value: n/a
+      */
      public void buildStopLocationTrackingDialog(){
           DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                @Override
@@ -289,6 +338,14 @@ public class HomeFragment extends Fragment {
                   .show();
      }
 
+     /*
+     Method Name: buildGoToSettingsPermissionsDialog
+     Creation date: 03/06/20
+     Purpose: to show the user a dialog to go to settings.
+     Calling Arguments: n/a
+     Required Files: n/a
+     Return Value: n/a
+      */
      public void buildGoToSettingsPermissionsDialog(){
           DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                @Override
@@ -318,6 +375,14 @@ public class HomeFragment extends Fragment {
                   .show();
      }
 
+     /*
+     Method Name: requestPermissions
+     Creation date: 03/06/20
+     Purpose: to check if app permissions are granted by the user
+     Calling Arguments: n/a
+     Required Files: n/a
+     Return Value: n/a
+      */
      public void requestPermissions(){
           if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) +
                   ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) +
@@ -354,6 +419,15 @@ public class HomeFragment extends Fragment {
           }
      }
 
+
+     /*
+     Method Name: onRequestPermissionsResult
+     Creation date: 03/06/20
+     Purpose: callback function to ensure permissions are granted by the user
+     Calling Arguments: int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults
+     Required Files: n/a
+     Return Value: n/a
+      */
      @Override
      public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
           //I dont think this function even gets called lol
@@ -390,10 +464,19 @@ public class HomeFragment extends Fragment {
           }
      }
 
+     /*
+     Method Name: createLocationRequest
+     Creation date: 03/06/20
+     Purpose: to initialize the fusedlocationservice settings
+     Calling Arguments: n/a
+     Required Files: n/a
+     Return Value: n/a
+      */
      protected void createLocationRequest() {
+          int interval = settingsPreferences.getInt("Settings_Freq", 0);
           locationRequest = LocationRequest.create();
-          locationRequest.setInterval(60000); //1 minute
-          locationRequest.setFastestInterval(5000); // 5 seconds
+          locationRequest.setInterval(interval*60000); //user interval * 1 minute
+          locationRequest.setFastestInterval(60000); // 1 minute
           locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY); //use GPS
 
           LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
@@ -428,6 +511,14 @@ public class HomeFragment extends Fragment {
           });
      }
 
+     /*
+     Method Name: startLocationUpdates
+     Creation date: 03/06/20
+     Purpose: to start the fusedlocation service for location tracking
+     Calling Arguments: n/a
+     Required Files: n/a
+     Return Value: n/a
+      */
      private void startLocationUpdates(){
           //Start Foreground Location Service
           startLocationForegroundService();
@@ -441,6 +532,14 @@ public class HomeFragment extends Fragment {
                   Looper.getMainLooper());
      }
 
+     /*
+     Method Name: stopLocationUpdates
+     Creation date: 03/06/20
+     Purpose: to stop the fusedlocation service for location tracking
+     Calling Arguments: n/a
+     Required Files: n/a
+     Return Value: n/a
+      */
      private void stopLocationUpdates(){
           //stop fusedlocationclient from getting location updates
           fusedLocationClient.removeLocationUpdates(locationCallback);
@@ -460,6 +559,14 @@ public class HomeFragment extends Fragment {
           updateLocationUIElements();
      }
 
+     /*
+     Method Name: reverseGeocode
+     Creation date: 03/06/20
+     Purpose: to obtain the street address of the user given the location coordinates
+     Calling Arguments: double lat, double lon
+     Required Files: n/a
+     Return Value: String
+      */
      public String reverseGeocode(double lat, double lon) throws IOException {
           if(isConnectedToInternet()){
                List<Address> userAddressList;
@@ -471,13 +578,20 @@ public class HomeFragment extends Fragment {
           
      }
 
+     /*
+     Method Name: isConnectedToInternet
+     Creation date: 03/06/20
+     Purpose: to check if the user's device can connect to the internet.
+     Calling Arguments: n/a
+     Required Files: n/a
+     Return Value: boolean
+      */
      private boolean isConnectedToInternet() {
           ConnectivityManager cm =
-                  (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                  (ConnectivityManager) Objects.requireNonNull(getContext()).getSystemService(Context.CONNECTIVITY_SERVICE);
 
           NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-          boolean isConnected = activeNetwork != null &&
+          return activeNetwork != null &&
                   activeNetwork.isConnectedOrConnecting();
-          return isConnected;
      }
 }
