@@ -386,14 +386,12 @@ public class HomeFragment extends Fragment {
      public void requestPermissions(){
           if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) +
                   ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) +
-                  ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) +
-                  ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_NETWORK_STATE)
+                  ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)
                   != PackageManager.PERMISSION_GRANTED){
 
                if (ActivityCompat.shouldShowRequestPermissionRationale (getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) ||
                        ActivityCompat.shouldShowRequestPermissionRationale (getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) ||
-                       ActivityCompat.shouldShowRequestPermissionRationale (getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) ||
-                       ActivityCompat.shouldShowRequestPermissionRationale (getActivity(), Manifest.permission.ACCESS_NETWORK_STATE)){
+                       ActivityCompat.shouldShowRequestPermissionRationale (getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)){
                     //Show a short explanation to the user
                     Snackbar.make(getActivity().findViewById(android.R.id.content),
                             "Please Grant Location Permissions to start sending location.",
@@ -405,13 +403,14 @@ public class HomeFragment extends Fragment {
                                               new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                                                       Manifest.permission.ACCESS_COARSE_LOCATION,
                                                       Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                                                      Manifest.permission.ACCESS_NETWORK_STATE},
+                                                      },
                                               Constants.MY_MULTIPLE_PERMISSIONS_REQUEST_LOCATION);
                                       buildStartLocationTrackingDialog();
                                  }
                             }).show();
                } else {
                     buildGoToSettingsPermissionsDialog();
+
                }
           } else {
                // write your logic code if permission already granted
@@ -428,41 +427,41 @@ public class HomeFragment extends Fragment {
      Required Files: n/a
      Return Value: n/a
       */
-     @Override
-     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-          //I dont think this function even gets called lol
-          switch (requestCode) {
-               case Constants.MY_MULTIPLE_PERMISSIONS_REQUEST_LOCATION:
-                    if (grantResults.length > 0) {
-                         boolean backgroundPermission = grantResults[2] == PackageManager.PERMISSION_GRANTED;
-                         boolean coarsePermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                         boolean finePermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-
-                         if(finePermission && coarsePermission && backgroundPermission) {
-                              Log.e("Test", "Hello there");
-                              requestPermissions();
-                         } else {
-                              Log.e("Test", "noice");
-                              Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                      "Please Grant ALL Permissions to start sending location.",
-                                      Snackbar.LENGTH_INDEFINITE).setAction("GRANT",
-                                      new View.OnClickListener() {
-                                           @Override
-                                           public void onClick(View v) {
-                                                requestPermissions(
-                                                        new String[]{
-                                                                Manifest.permission.ACCESS_FINE_LOCATION,
-                                                                Manifest.permission.ACCESS_COARSE_LOCATION,
-                                                                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                                                        },
-                                                        Constants.MY_MULTIPLE_PERMISSIONS_REQUEST_LOCATION);
-                                           }
-                                      }).show();
-                         }
-                    }
-                    break;
-          }
-     }
+//     @Override
+//     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//          //I dont think this function even gets called lol
+//          switch (requestCode) {
+//               case Constants.MY_MULTIPLE_PERMISSIONS_REQUEST_LOCATION:
+//                    if (grantResults.length > 0) {
+//                         boolean backgroundPermission = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+//                         boolean coarsePermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+//                         boolean finePermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+//
+//                         if(finePermission && coarsePermission && backgroundPermission) {
+//                              Log.e("Test", "Hello there");
+//                              requestPermissions();
+//                         } else {
+//                              Log.e("Test", "noice");
+//                              Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content),
+//                                      "Please Grant ALL Permissions to start sending location.",
+//                                      Snackbar.LENGTH_INDEFINITE).setAction("GRANT",
+//                                      new View.OnClickListener() {
+//                                           @Override
+//                                           public void onClick(View v) {
+//                                                requestPermissions(
+//                                                        new String[]{
+//                                                                Manifest.permission.ACCESS_FINE_LOCATION,
+//                                                                Manifest.permission.ACCESS_COARSE_LOCATION,
+//                                                                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+//                                                        },
+//                                                        Constants.MY_MULTIPLE_PERMISSIONS_REQUEST_LOCATION);
+//                                           }
+//                                      }).show();
+//                         }
+//                    }
+//                    break;
+//          }
+//     }
 
      /*
      Method Name: createLocationRequest
